@@ -1,11 +1,12 @@
 import "../css/App.css";
 import { ListContacts } from "./ListContacts";
 import { useState, useEffect } from "react";
-import { getAll, remove } from "../utils/ContactsAPI";
+import { getAll, remove, create } from "../utils/ContactsAPI";
 import { CreateContact } from "./CreateContact";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 const App = () => {
+  let navigate = useNavigate();
   useEffect(() => {
     getAll().then((contactsRes) => setContacts(contactsRes));
 
@@ -26,6 +27,17 @@ const App = () => {
     remove(selectedContact);
   };
 
+  const createContact = (contact) => {
+    console.log("contact", contact);
+    const createContacto = async () => {
+      const res = await create(contact);
+      setContacts(contacts.concat(res));
+    };
+
+    createContacto();
+    navigate("/");
+  };
+
   return (
     <Routes>
       <Route
@@ -35,7 +47,10 @@ const App = () => {
           <ListContacts contacts={contacts} onDeleteContact={deleteContact} />
         }
       />
-      <Route path="/create" element={<CreateContact />} />
+      <Route
+        path="/create"
+        element={<CreateContact onCreateContact={createContact} />}
+      />
     </Routes>
   );
 };
