@@ -2,6 +2,8 @@ import "../css/App.css";
 import { ListContacts } from "./ListContacts";
 import { useState, useEffect } from "react";
 import { getAll, remove } from "../utils/ContactsAPI";
+import { CreateContact } from "./CreateContact";
+import { Routes, Route } from "react-router-dom";
 
 const App = () => {
   useEffect(() => {
@@ -25,9 +27,16 @@ const App = () => {
   };
 
   return (
-    <div>
-      <ListContacts contacts={contacts} onDeleteContact={deleteContact} />
-    </div>
+    <Routes>
+      <Route
+        exact
+        path="/"
+        element={
+          <ListContacts contacts={contacts} onDeleteContact={deleteContact} />
+        }
+      />
+      <Route path="/create" element={<CreateContact />} />
+    </Routes>
   );
 };
 
